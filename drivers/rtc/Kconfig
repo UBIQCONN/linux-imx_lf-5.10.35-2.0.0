@@ -1961,4 +1961,13 @@ config RTC_DRV_WILCO_EC
 	  This can also be built as a module. If so, the module will
 	  be named "rtc_wilco_ec".
 
+config RTC_DRV_MAX31342
+	tristate "Maxim MAX31342"
+	help
+	  If you say yes here you will get support for the
+	  Maxim MAX31342 I2C RTC chip.
+
+	  This driver can also be built as a module. If so, the module
+	  will be called rtc-max31342.
+
 endif # RTC_CLASS
