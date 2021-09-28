@@ -554,7 +554,12 @@
 
 &usbotg1 {
         vbus-supply = <&reg_usb_otg1_vbus>;
-        dr_mode = "peripheral";
+        dr_mode = "host";
+        srp-disable;
+        hnp-disable;
+        adp-disable;
+        disable-over-current;
+        /delete-property/ usb-role-switch;
         status = "okay";
 };
 
