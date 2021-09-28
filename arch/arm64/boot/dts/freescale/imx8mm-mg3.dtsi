@@ -110,7 +110,7 @@
 		regulator-max-microvolt = <5000000>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_can_bus_standby>;
-		gpio = <&gpio1 8 GPIO_ACTIVE_HIGH>;
+		gpio = <&gpio1 6 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 	};
 
@@ -631,7 +631,7 @@
 		>;
 	};
 
-	pinctrl_ecspi1_cs: ecspi2cs {
+	pinctrl_ecspi1_cs: ecspi1cs {
 		fsl,pins = <
 			MX8MM_IOMUXC_ECSPI1_SS0_GPIO5_IO9		0x40000
 		>;
@@ -836,8 +836,8 @@
 
 	pinctrl_uart3: uart3grp {
 		fsl,pins = <
-			MX8MM_IOMUXC_ECSPI1_SCLK_UART3_DCE_RX           0x140
-			MX8MM_IOMUXC_ECSPI1_MOSI_UART3_DCE_TX           0x140
+			MX8MM_IOMUXC_UART3_RXD_UART3_DCE_RX	0x140
+			MX8MM_IOMUXC_UART3_TXD_UART3_DCE_TX	0x140
 		>;
 	};
 
@@ -930,7 +930,7 @@
 
 	pinctrl_can_bus_standby: can0standbygrp {
 		fsl,pins = <
-			MX8MM_IOMUXC_GPIO1_IO08_GPIO1_IO8	0x19
+			MX8MM_IOMUXC_GPIO1_IO06_GPIO1_IO6	0x19
 		>;
 	};
 
