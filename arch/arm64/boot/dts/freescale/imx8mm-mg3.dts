@@ -12,11 +12,12 @@
 	model = "FSL i.MX8MM MG3 board";
 	compatible = "fsl,imx8mm-mg3", "fsl,imx8mm";
 
-	usdhc1_pwrseq: usdhc1_pwrseq {
-		compatible = "mmc-pwrseq-simple";
+	bcmdhd {
+        	compatible = "android,bcmdhd_wlan";
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_usdhc1_gpio>;
-		reset-gpios = <&gpio2 10 GPIO_ACTIVE_LOW>;
+	        gpio_wl_reg_on = <&gpio2 10 GPIO_ACTIVE_HIGH>;
+	        gpio_wl_host_wake = <&gpio2 9 GPIO_ACTIVE_HIGH>;
 	};
 };
 
@@ -50,15 +51,7 @@
 	pm-ignore-notify;
 	keep-power-in-suspend;
 	non-removable;
-	mmc-pwrseq = <&usdhc1_pwrseq>;
 	status = "okay";
-
-	wifi_wake_host {
-		compatible = "nxp,wifi-wake-host";
-		interrupt-parent = <&gpio2>;
-		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
-		interrupt-names = "host-wake";
-	};
 };
 
 &usdhc3 {
@@ -130,4 +123,11 @@
 			MX8MM_IOMUXC_SD1_DATA7_GPIO2_IO9		0x159
 		>;
 	};
+
+       pinctrl_usdhc1_gpio: usdhc1grpgpio {
+               fsl,pins = <
+                       MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10     0x41
+               >;
+       };
+
 };

@@ -114,6 +114,16 @@
 		enable-active-high;
 	};
 
+	wifi_bt_power: wifi-bt-regulator {
+                compatible = "regulator-fixed";
+                enable-active-high;
+                gpio = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+                pinctrl-names = "default";
+                pinctrl-0 = <&wifi_bt_drv>;
+                regulator-name = "wifi_bt_power";
+                regulator-always-on;
+                regulator-boot-on;
+        };
 };
 
 &A53_0 {
@@ -720,7 +730,6 @@
 	pinctrl_pcie0: pcie0grp {
 		fsl,pins = <
 	/*		MX8MM_IOMUXC_I2C4_SCL_PCIE1_CLKREQ_B	0x61 *//* open drain, pull up */
-	/*		MX8MM_IOMUXC_GPIO1_IO05_GPIO1_IO5	0x41 */
 			MX8MM_IOMUXC_SAI2_RXFS_GPIO4_IO21	0x41
 		>;
 	};
@@ -838,12 +847,6 @@
 		fsl,pins = <
 			MX8MM_IOMUXC_UART3_RXD_UART3_DCE_RX	0x140
 			MX8MM_IOMUXC_UART3_TXD_UART3_DCE_TX	0x140
-		>;
-	};
-
-	pinctrl_usdhc1_gpio: usdhc1grpgpio {
-		fsl,pins = <
-			MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x41
 		>;
 	};
 
@@ -982,4 +985,11 @@
 			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B	0xc6
 		>;
 	};
+
+	wifi_bt_drv: wifi-bt-drv{
+		fsl,pins = <
+			MX8MM_IOMUXC_SD1_STROBE_GPIO2_IO11	0x19
+		>;
+	};
+
 };
