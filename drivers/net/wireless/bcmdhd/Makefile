@@ -258,7 +258,7 @@ BCMDHD_ROOT = $(src)
 #$(warning "BCMDHD_ROOT=$(BCMDHD_ROOT)")
 EXTRA_CFLAGS = $(DHDCFLAGS)
 EXTRA_CFLAGS += -DDHD_COMPILED=\"$(BCMDHD_ROOT)\"
-EXTRA_CFLAGS += -I$(BCMDHD_ROOT)/include/ -I$(BCMDHD_ROOT)/
+EXTRA_CFLAGS += -I$(BCMDHD_ROOT)/
 ifeq ($(CONFIG_BCMDHD),m)
 EXTRA_LDFLAGS += --strip-debug
 endif
@@ -266,6 +266,11 @@ endif
 obj-$(CONFIG_BCMDHD) += $(MODULE_NAME).o
 $(MODULE_NAME)-objs += $(DHDOFILES)
 ccflags-y := $(EXTRA_CFLAGS)
+
+
+ccflags-y := \
+	-I $(srctree)/$(src) \
+	-I $(srctree)/$(src)/include 
 
 all: bcmdhd_pcie bcmdhd_sdio bcmdhd_usb
 
