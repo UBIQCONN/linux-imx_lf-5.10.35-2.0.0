@@ -1891,7 +1891,7 @@ err_reset_phy:
 		if (imx6_pcie->epdev_on != NULL)
 			regulator_disable(imx6_pcie->epdev_on);
 		if (gpio_is_valid(imx6_pcie->dis_gpio))
-			gpio_set_value_cansleep(imx6_pcie->dis_gpio, 0);
+			gpio_set_value_cansleep(imx6_pcie->dis_gpio, 1);
 	}
 
 	return ret;
@@ -2710,7 +2710,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
 		goto err_ret;
 	}
 	if (gpio_is_valid(imx6_pcie->dis_gpio))
-		gpio_set_value_cansleep(imx6_pcie->dis_gpio, 1);
+		gpio_set_value_cansleep(imx6_pcie->dis_gpio, 0);
 
 	imx6_pcie_assert_core_reset(imx6_pcie);
 	imx6_pcie_init_phy(imx6_pcie);

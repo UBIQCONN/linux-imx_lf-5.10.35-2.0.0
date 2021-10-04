@@ -124,6 +124,33 @@
                 regulator-always-on;
                 regulator-boot-on;
         };
+
+	EM9_Full_pwr_on: em9-full-pwr-on {
+                compatible = "regulator-fixed";
+                regulator-name = "em9_full_pwr_up";
+                enable-active-high;
+                gpio = <&pca9535_2 8 GPIO_ACTIVE_HIGH>;
+                regulator-always-on;
+                regulator-boot-on;
+        };
+
+	EM7_Full_pwr_on: em7-full-pwr-on {
+                compatible = "regulator-fixed";
+                regulator-name = "em7_full_pwr_up";
+                enable-active-high;
+                gpio = <&pca9535_2 9 GPIO_ACTIVE_HIGH>;
+                regulator-always-on;
+                regulator-boot-on;
+        };
+
+	EM9_RESET: em9-reset {
+                compatible = "regulator-fixed";
+                regulator-name = "em10_reset";
+                enable-active-low;
+                gpio = <&pca9535_2 10 GPIO_ACTIVE_HIGH>;
+                regulator-always-on;
+                regulator-boot-on;
+        };
 };
 
 &A53_0 {
@@ -422,7 +449,7 @@
 &pcie0{
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_pcie0>;
-	disable-gpio = <&pca9535_2 14 GPIO_ACTIVE_LOW>; 
+	disable-gpio = <&pca9535_2 14 GPIO_ACTIVE_LOW>;   
 	reset-gpio = <&gpio4 21 GPIO_ACTIVE_LOW>;
 	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>,
 		 <&clk IMX8MM_CLK_PCIE1_AUX>,
@@ -437,7 +464,7 @@
 				 <&clk IMX8MM_SYS_PLL2_100M>,
 				 <&clk IMX8MM_SYS_PLL2_250M>;
 	ext_osc = <1>;
-	status = "disabled";
+	status = "okay";
 };
 
 &pcie0_ep{
@@ -729,7 +756,6 @@
 
 	pinctrl_pcie0: pcie0grp {
 		fsl,pins = <
-	/*		MX8MM_IOMUXC_I2C4_SCL_PCIE1_CLKREQ_B	0x61 *//* open drain, pull up */
 			MX8MM_IOMUXC_SAI2_RXFS_GPIO4_IO21	0x41
 		>;
 	};
