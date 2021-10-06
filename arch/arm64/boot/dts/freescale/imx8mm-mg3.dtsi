@@ -111,7 +111,7 @@
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_can_bus_standby>;
 		gpio = <&gpio1 6 GPIO_ACTIVE_HIGH>;
-		enable-active-high;
+		enable-active-low;
 	};
 
 	wifi_bt_power: wifi-bt-regulator {
@@ -191,6 +191,10 @@
 		compatible = "microchip,mcp25625";
 		reg = <0>;
 		clocks = <&clk16m>;
+                pinctrl-names = "default";
+                pinctrl-0 = <&pinctrl_can_int>;
+		interrupt-parent = <&gpio5>;
+                interrupts = <29 IRQ_TYPE_LEVEL_LOW>;
 		spi-max-frequency = <5000000>;
 		vdd-supply = <&can_bus_reset>;
 		xceiver-supply = <&can_bus_standby>;
@@ -960,6 +964,12 @@
 	pinctrl_can_bus_standby: can0standbygrp {
 		fsl,pins = <
 			MX8MM_IOMUXC_GPIO1_IO06_GPIO1_IO6	0x19
+		>;
+	};
+
+	pinctrl_can_int: can0intgrp {
+		fsl,pins = <
+			MX8MM_IOMUXC_UART4_TXD_GPIO5_IO29	0x19
 		>;
 	};
 
