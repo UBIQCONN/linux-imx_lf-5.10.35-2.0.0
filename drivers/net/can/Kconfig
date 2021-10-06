@@ -167,6 +167,12 @@ config PCH_CAN
 	  is an IOH for x86 embedded processor (Intel Atom E6xx series).
 	  This driver can access CAN bus.
 
+config ELM_CAN
+	tristate "ELM CAN"
+	depends on ARM || ARM64 
+	help
+	  ELM CAN driver. This driver supports stn2100 CAN IP.
+
 source "drivers/net/can/c_can/Kconfig"
 source "drivers/net/can/cc770/Kconfig"
 source "drivers/net/can/ifi_canfd/Kconfig"
