@@ -19,6 +19,33 @@
 	        gpio_wl_reg_on = <&gpio2 10 GPIO_ACTIVE_HIGH>;
 	        gpio_wl_host_wake = <&gpio2 9 GPIO_ACTIVE_HIGH>;
 	};
+
+	sound_tlv320aic3104: sound-tlv320aic3104 {
+		compatible = "simple-audio-card";
+		simple-audio-card,name = "tlv320aic3104-audio";
+		simple-audio-card,format = "i2s";
+		simple-audio-card,frame-master = <&cpudai>;
+		simple-audio-card,bitclock-master = <&cpudai>;
+		simple-audio-card,widgets =
+			"Line", "Line Out",
+			"Line", "Line IN";
+		simple-audio-card,routing =
+			"Line Out", "LLOUT",
+			"Line Out", "RLOUT",
+			"LINE1L", "Line IN",
+			"LINE1R", "Line IN";
+
+		cpudai: simple-audio-card,cpu {
+			sound-dai = <&sai3>;
+			dai-tdm-slot-num = <2>;
+			dai-tdm-slot-width = <32>;
+		};
+
+		simple-audio-card,codec {
+			sound-dai = <&tlv320aic3x>;
+			clocks = <&clk IMX8MM_CLK_SAI3_ROOT>;
+		};
+	};
 };
 
 &ddrc {
@@ -130,4 +157,22 @@
                >;
        };
 
+	pinctrl_audio_reset: audio-reset {
+		fsl,pins = <
+			MX8MM_IOMUXC_GPIO1_IO14_GPIO1_IO14      0x13
+		>;
+	};
+
+};
+
+&i2c2 {
+	tlv320aic3x: tlv320aic3x@18 {
+		#sound-dai-cells = <0>;
+		compatible = "ti,tlv320aic3104";
+		pinctrl-0 = <&pinctrl_audio_reset>;
+		reg = <0x18>;
+		status = "okay";
+		ai3x-micbias-vg = <0x3>;
+		gpio-reset = <&gpio1 14 GPIO_ACTIVE_LOW>;
+	};
 };
