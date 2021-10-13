@@ -176,3 +176,7 @@
 		gpio-reset = <&gpio1 14 GPIO_ACTIVE_LOW>;
 	};
 };
+
+&snvs_rtc {
+	status = "disabled";
+};
