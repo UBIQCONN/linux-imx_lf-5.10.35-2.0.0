@@ -151,6 +151,15 @@
                 regulator-always-on;
                 regulator-boot-on;
         };
+
+	EM7_RESET: em7-reset {
+                compatible = "regulator-fixed";
+                regulator-name = "em11_reset";
+                enable-active-low;
+                gpio = <&pca9535_2 11 GPIO_ACTIVE_HIGH>;
+                regulator-always-on;
+                regulator-boot-on;
+        };
 };
 
 &A53_0 {
