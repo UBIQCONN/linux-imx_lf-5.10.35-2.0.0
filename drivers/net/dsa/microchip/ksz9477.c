@@ -1378,6 +1378,12 @@ static int ksz9477_setup(struct dsa_switch *ds)
 	/* enable global MIB counter freeze function */
 	ksz_cfg(dev, REG_SW_MAC_CTRL_6, SW_MIB_COUNTER_FREEZE, true);
 
+	/* Port5 1000BASE-T Control Register
+	   Force half duplex capable
+	   because of physical two-pair ethernet hardware limitation
+	*/
+	ksz_write16(dev, 0x5112, 0x0400);
+
 	/* start switch */
 	ksz_cfg(dev, REG_SW_OPERATION, SW_START, true);
 
