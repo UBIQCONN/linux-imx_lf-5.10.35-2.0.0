@@ -659,14 +659,6 @@
 };
 
 &iomuxc {
-        pinctrl-names = "default";
-        pinctrl-0 = <&pinctrl_hog>;
-
-        pinctrl_hog: hoggrp {
-                fsl,pins = <
-			MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0               0x19    
-		>;
-	};
 
 	pinctrl_ecspi1: ecspi1grp {
 		fsl,pins = <
