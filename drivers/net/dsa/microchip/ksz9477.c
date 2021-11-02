@@ -1346,6 +1346,7 @@ static int ksz9477_setup(struct dsa_switch *ds)
 {
 	struct ksz_device *dev = ds->priv;
 	int ret = 0;
+	u8 xmiicr = 0;
 
 	dev->vlan_cache = devm_kcalloc(dev->dev, sizeof(struct vlan_table),
 				       dev->num_vlans, GFP_KERNEL);
@@ -1383,6 +1384,17 @@ static int ksz9477_setup(struct dsa_switch *ds)
 	   because of physical two-pair ethernet hardware limitation
 	*/
 	ksz_write16(dev, 0x5112, 0x0400);
+
+	/* Port6 XMII CR
+	   Enable RGMII Egress Internal Delay
+	*/
+	ksz_cfg(dev, 0x6301, PORT_RGMII_ID_IG_ENABLE, true);
+	ret = ksz_read8(dev, 0x6301, &xmiicr);
+	dev_info(dev->dev, "%s CPU port6 cr =0x%x\n", __func__, xmiicr);
+
+	/* Port7 XMII CR */
+	ret = ksz_read8(dev, 0x7301, &xmiicr);
+	dev_info(dev->dev, "%s 8089 port7 cr =0x%x\n", __func__, xmiicr);
 
 	/* start switch */
 	ksz_cfg(dev, REG_SW_OPERATION, SW_START, true);
