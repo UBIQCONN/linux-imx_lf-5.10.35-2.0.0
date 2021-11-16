@@ -160,7 +160,6 @@
                 enable-active-low;
                 gpio = <&pca9535_2 11 GPIO_ACTIVE_HIGH>;
                 regulator-always-on;
-                regulator-boot-on;
         };
 };
 
