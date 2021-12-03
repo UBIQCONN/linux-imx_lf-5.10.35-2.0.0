@@ -1196,7 +1196,8 @@ static void ksz9477_port_setup(struct ksz_device *dev, int port, bool cpu_port)
 	/* enable 802.1p priority */
 	ksz_port_cfg(dev, port, P_PRIO_CTRL, PORT_802_1P_PRIO_ENABLE, true);
 
-	if (port < dev->phy_port_cnt) {
+	/* FIXME: check port7 if necessary */
+	if (port < dev->phy_port_cnt || !cpu_port) {
 		/* do not force flow control */
 		ksz_port_cfg(dev, port, REG_PORT_CTRL_0,
 			     PORT_FORCE_TX_FLOW_CTRL | PORT_FORCE_RX_FLOW_CTRL,
@@ -1338,6 +1339,10 @@ static void ksz9477_config_cpu_port(struct dsa_switch *ds)
 
 			/* SGMII PHY detection code is not implemented yet. */
 			p->phy = 0;
+		}
+		/* FIXME: check port7 if necessary */
+		if (dev->chip_id == 0x00989700 && i == 6) {
+			p->phy = 1;
 		}
 	}
 }
