@@ -53,7 +53,7 @@
 		clock-frequency = <16000000>;
 		clock-output-names = "clk16m";
 	};
-
+/*
 	reg_usb_otg1_vbus: regulator-usbotg1-vbus {
 		compatible = "regulator-fixed";
 		regulator-name = "usb_otg1_vbus";
@@ -64,7 +64,7 @@
 		gpio = <&gpio4 27 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 	};
-
+*/
         /* on module USB hub */
         reg_usb_host_vbus_hub: regulator-usb-host-vbus-hub {
                 compatible = "regulator-fixed";
@@ -79,6 +79,7 @@
                 status = "okay";
         };
 
+/*
 	reg_usb_otg2_vbus: regulator-usbotg2-vbus {
 		compatible = "regulator-fixed";
 		regulator-name = "usb_otg2_vbus";
@@ -90,7 +91,7 @@
 		vin-supply = <&reg_usb_host_vbus_hub>;
 		enable-active-high;
 	};
-
+*/
 	can_bus_reset: regulator-canbus-reset {
 		compatible = "regulator-fixed";
 		regulator-name = "can_bus_reset";
@@ -591,8 +592,9 @@
 	status = "okay";
 };
 
+
 &usbotg1 {
-        vbus-supply = <&reg_usb_otg1_vbus>;
+/*        vbus-supply = <&reg_usb_otg1_vbus>; */
         dr_mode = "host";
         srp-disable;
         hnp-disable;
@@ -602,9 +604,10 @@
         status = "okay";
 };
 
+
 &usbotg2 {
         dr_mode = "host";
-        vbus-supply = <&reg_usb_otg2_vbus>;
+/*        vbus-supply = <&reg_usb_otg2_vbus>; */
         srp-disable;
         hnp-disable;
         adp-disable;
