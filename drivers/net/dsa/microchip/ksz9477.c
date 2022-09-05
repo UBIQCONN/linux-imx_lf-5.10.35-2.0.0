@@ -1347,6 +1347,32 @@ static void ksz9477_config_cpu_port(struct dsa_switch *ds)
 	}
 }
 
+static void ksz9477_setup_testmode(struct ksz_device *dev, u8 port, u8 mode)
+{
+	u16 reg;
+
+	reg = REG_PORT_PHY_CTRL | (port << 12);
+	ksz_cfg(dev, reg, 0x0140);
+
+	reg = REG_PORT_PHY_1000_CTRL | (port << 12);
+	switch (mode) {
+		case 1:
+			ksz_cfg(dev, reg, PORT_TEST_MODE1, true);
+			break;
+		case 2:
+			ksz_cfg(dev, reg, PORT_TEST_MODE2, true);
+			break;
+		case 3:
+			ksz_cfg(dev, reg, PORT_TEST_MODE1, true);
+			ksz_cfg(dev, reg, PORT_TEST_MODE2, true);
+			break;
+		case 4:
+			ksz_cfg(dev, reg, PORT_TEST_MODE4, true);
+			break;
+		default:
+			break:
+	}
+}
 static int ksz9477_setup(struct dsa_switch *ds)
 {
 	struct ksz_device *dev = ds->priv;
@@ -1394,6 +1420,9 @@ static int ksz9477_setup(struct dsa_switch *ds)
 	/* Port7 XMII CR */
 	ret = ksz_read8(dev, 0x7301, &xmiicr);
 	dev_info(dev->dev, "%s 8089 port7 cr =0x%x\n", __func__, xmiicr);
+
+	/* Enable Port1 test mode 1 */
+	ksz9477_setup_testmode(dev, 1, 1);
 
 	/* start switch */
 	ksz_cfg(dev, REG_SW_OPERATION, SW_START, true);

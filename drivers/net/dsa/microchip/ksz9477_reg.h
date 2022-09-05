@@ -940,6 +940,9 @@
 
 #define REG_PORT_PHY_1000_CTRL		0x0112
 
+#define PORT_TEST_MODE4             BIT(15)
+#define PORT_TEST_MODE2             BIT(14)
+#define PORT_TEST_MODE1             BIT(13)
 #define PORT_AUTO_NEG_MANUAL		BIT(12)
 #define PORT_AUTO_NEG_MASTER		BIT(11)
 #define PORT_AUTO_NEG_MASTER_PREFERRED	BIT(10)
