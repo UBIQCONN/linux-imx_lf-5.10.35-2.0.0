@@ -28,6 +28,7 @@ struct usb_extcon_info {
 
 	struct gpio_desc *id_gpiod;
 	struct gpio_desc *vbus_gpiod;
+	struct gpio_desc *vbuspwr_gpiod;
 	int id_irq;
 	int vbus_irq;
 
@@ -40,6 +41,15 @@ static const unsigned int usb_extcon_cable[] = {
 	EXTCON_USB_HOST,
 	EXTCON_NONE,
 };
+
+
+static void usb_set_vbus_power(struct usb_extcon_info *info, int value)
+{
+	if (info->vbuspwr_gpiod){
+		dev_err(info->dev, "vbus power:%d\n", value);
+		gpiod_set_value_cansleep(info->vbuspwr_gpiod, value);
+	}		
+}	
 
 /*
  * "USB" = VBUS and "USB-HOST" = !ID, so we have:
@@ -72,12 +82,15 @@ static void usb_extcon_detect_cable(struct work_struct *work)
 		gpiod_get_value_cansleep(info->vbus_gpiod) : id;
 
 	/* at first we clean states which are no longer active */
-	if (id)
+	if (id){
 		extcon_set_state_sync(info->edev, EXTCON_USB_HOST, false);
+		usb_set_vbus_power(info, false);
+	}	
 	if (!vbus)
 		extcon_set_state_sync(info->edev, EXTCON_USB, false);
 
 	if (!id) {
+		usb_set_vbus_power(info, true);
 		extcon_set_state_sync(info->edev, EXTCON_USB_HOST, true);
 	} else {
 		if (vbus)
@@ -113,6 +126,8 @@ static int usb_extcon_probe(struct platform_device *pdev)
 	info->id_gpiod = devm_gpiod_get_optional(&pdev->dev, "id", GPIOD_IN);
 	info->vbus_gpiod = devm_gpiod_get_optional(&pdev->dev, "vbus",
 						   GPIOD_IN);
+	info->vbuspwr_gpiod = devm_gpiod_get_optional(&pdev->dev, "vbuspwr",
+						   GPIOD_OUT_LOW);
 
 	if (!info->id_gpiod && !info->vbus_gpiod) {
 		dev_err(dev, "failed to get gpios\n");
