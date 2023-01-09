@@ -272,6 +272,19 @@ static const char * const aic3x_adc_hpf[] = {
 static SOC_ENUM_DOUBLE_DECL(aic3x_adc_hpf_enum, AIC3X_CODEC_DFILT_CTRL, 6, 4,
 			    aic3x_adc_hpf);
 
+static const char * const aic3x_linein_level[] = {
+	"0dB", "-1.5dB", "-3dB", "-4.5dB",
+	"-6dB", "-7.5dB", "-9dB", "-10.5dB" };
+static SOC_ENUM_SINGLE_DECL(aic3x_rlinein_level_r_enum, LINE1R_2_RADC_CTRL, 3,
+			    aic3x_linein_level);
+static SOC_ENUM_SINGLE_DECL(aic3x_llinein_level_l_enum, LINE1L_2_LADC_CTRL, 3,
+			    aic3x_linein_level);
+static SOC_ENUM_SINGLE_DECL(aic3x_llinein_level_r_enum, LINE1L_2_RADC_CTRL, 3,
+			    aic3x_linein_level);
+static SOC_ENUM_SINGLE_DECL(aic3x_rlinein_level_l_enum, LINE1R_2_LADC_CTRL, 3,
+			    aic3x_linein_level);
+
+
 static const char * const aic3x_agc_level[] = {
 	"-5.5dB", "-8dB", "-10dB", "-12dB",
 	"-14dB", "-17dB", "-20dB", "-24dB" };
@@ -425,6 +438,11 @@ static const struct snd_kcontrol_new aic3x_snd_controls[] = {
 	/* Pop reduction */
 	SOC_ENUM("Output Driver Power-On time", aic3x_poweron_time_enum),
 	SOC_ENUM("Output Driver Ramp-up step", aic3x_rampup_step_enum),
+	
+	SOC_ENUM("Right Line to Right ADC level", aic3x_rlinein_level_r_enum),
+	SOC_ENUM("Right Line to Left ADC level", aic3x_rlinein_level_l_enum),
+	SOC_ENUM("Left Line to Right ADC level", aic3x_llinein_level_r_enum),
+	SOC_ENUM("Left Line to Left ADC level", aic3x_llinein_level_l_enum),
 };
 
 /* For other than tlv320aic3104 */
@@ -1560,8 +1578,10 @@ static int aic3x_init(struct snd_soc_component *component)
 	snd_soc_component_write(component, LADC_VOL, DEFAULT_GAIN);
 	snd_soc_component_write(component, RADC_VOL, DEFAULT_GAIN);
 	/* By default route Line1 to ADC PGA mixer */
-	snd_soc_component_write(component, LINE1L_2_LADC_CTRL, 0x0);
-	snd_soc_component_write(component, LINE1R_2_RADC_CTRL, 0x0);
+	snd_soc_component_write(component, LINE1L_2_LADC_CTRL, 0x28);
+	snd_soc_component_write(component, LINE1R_2_RADC_CTRL, 0x28);
+	snd_soc_component_write(component, LINE1R_2_LADC_CTRL, 0x28);
+	snd_soc_component_write(component, LINE1L_2_RADC_CTRL, 0x28);
 
 	/* PGA to HP Bypass default volume, disconnect from Output Mixer */
 	snd_soc_component_write(component, PGAL_2_HPLOUT_VOL, DEFAULT_VOL);
