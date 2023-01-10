@@ -170,7 +170,7 @@
 	phy-reset-duration = <10>;
 	phy-reset-post-delay = <50>;
 	pinctrl-names = "default";
-	phy-mode = "rgmii-id";
+	phy-mode = "rgmii-txid";
 	fsl,magic-packet;
 	status = "okay";
 
@@ -184,7 +184,7 @@
 		#size-cells = <0>;
 
 		switch: switch@0 {
-			compatible = "marvell,mv88e6085";
+			compatible = "marvell,mv88e6350";  
 			pinctrl-0 = <&pinctrl_switch_intr>;
 			pinctrl-names = "default";
 			reg = <0>;
@@ -398,6 +398,8 @@
 	        #address-cells = <1>;
 	        #size-cells = <0>;
 	        reg = <0x61>;
+		nxp,hw-blink;
+		nxp,period-scale = <1300>;
 
 	        red@0 {
         	        label = "red";
@@ -447,6 +449,37 @@
 			};
 		};
         };
+
+	ltc4291: ltc4291@2c { 
+		compatible = "analog,ltc4291"; 
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_poe>;
+		reg = <0x2c>; 
+                interrupt-parent = <&gpio4>;
+		interrupts = <1 GPIO_ACTIVE_HIGH>;
+
+		port0@0 { 
+			enable = <1>; 
+			mode = "semiauto"; 
+			power = <1>; 
+		}; 
+
+		port1@1 { 
+			enable = <1>; 
+			mode = "semiauto"; 
+			power = <1>;
+		}; 
+
+		port2@2 { 
+			enable = <1>; 
+			mode = "auto"; 
+			power = <1>;
+		};
+ 
+		port3@3 { 
+			enable = <0>; 
+		}; 
+	};
 };
 
 &irqsteer_hdmi {
@@ -787,7 +820,6 @@
 			MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3		0x1f
 			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL	0x1f
 			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC		0x1f
-			MX8MP_IOMUXC_SAI1_RXD0__GPIO4_IO02		0x19
 		>;
 	};
 
@@ -1086,6 +1118,14 @@
 		fsl,pins = <
 			/* ENET_nRST */
 			MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11		0x59 
+		>;
+	};
+
+	pinctrl_poe: poe-pse {
+		fsl,pins = <
+			MX8MP_IOMUXC_SAI1_RXC__GPIO4_IO01		0x59
+			MX8MP_IOMUXC_SAI1_RXD0__GPIO4_IO02		0x59
+			MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03		0x59 
 		>;
 	};
 };
