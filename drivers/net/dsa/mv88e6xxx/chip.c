@@ -2575,7 +2575,7 @@ static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
 		err = mv88e6xxx_port_setup_mac(chip, port, LINK_FORCED_UP,
 					       SPEED_MAX, DUPLEX_FULL,
 					       PAUSE_OFF,
-					       PHY_INTERFACE_MODE_NA);
+					       PHY_INTERFACE_MODE_RGMII_ID);
 	else
 		err = mv88e6xxx_port_setup_mac(chip, port, LINK_UNFORCED,
 					       SPEED_UNFORCED, DUPLEX_UNFORCED,
@@ -5622,6 +5622,10 @@ static const struct of_device_id mv88e6xxx_of_match[] = {
 	{
 		.compatible = "marvell,mv88e6250",
 		.data = &mv88e6xxx_table[MV88E6250],
+	},
+	{
+		.compatible = "marvell,mv88e6350",
+		.data = &mv88e6xxx_table[MV88E6350],
 	},
 	{ /* sentinel */ },
 };
