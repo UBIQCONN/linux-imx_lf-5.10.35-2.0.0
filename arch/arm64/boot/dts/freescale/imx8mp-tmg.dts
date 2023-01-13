@@ -460,20 +460,26 @@
 
 		port0@0 { 
 			enable = <1>; 
-			mode = "semiauto"; 
+			mode = "auto"; 
 			power = <1>; 
+			max-class-single-signature = <3>;
+			max-class-dual-signature = <3>;
 		}; 
 
 		port1@1 { 
 			enable = <1>; 
-			mode = "semiauto"; 
+			mode = "auto"; 
 			power = <1>;
+			max-class-single-signature = <3>;
+			max-class-dual-signature = <3>;
 		}; 
 
 		port2@2 { 
 			enable = <1>; 
 			mode = "auto"; 
 			power = <1>;
+			max-class-single-signature = <8>;
+			max-class-dual-signature = <5>;
 		};
  
 		port3@3 { 

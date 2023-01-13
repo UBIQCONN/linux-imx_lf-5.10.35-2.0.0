@@ -190,6 +190,102 @@ static int ltc4291_switch_port_power(struct device *dev, int porti, int state) {
 	return ltc4291_write_reg(ddata, PWRPB_REG, state);
 }
 
+static u8 mask_value (u8 value, u8 offset,  u8 length)
+{
+	return (u8)(((((u8)(1 << length ) - 1) << offset) & value) >> offset);
+}	
+
+static u8 xor_value (u8 value, u8 offset, u8 length, u8 config)
+{
+	value &= ~(((1 << length) - 1) << offset);
+	
+//	printk(KERN_INFO"%s: %x %x %x %x %x\n", __func__, value, offset, length, config, config << offset);
+	return (value | (config << offset));
+}
+
+static int ltc4291_set_legen(struct device *dev, int port, int val) {
+	
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	u8 value = ltc4291_read_reg(ddata, HPMD_REG(port));
+	u8 write_value = xor_value (value, LEGEN_BIT, 1, val);
+
+	return ltc4291_write_reg(ddata, HPMD_REG(port), (u8)write_value);
+}	
+
+static int ltc4291_set_pse_avail_pwr_ss(struct device *dev, int port, int val) {
+	
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	u8 value = ltc4291_read_reg(ddata, HPMD_REG(port));
+	u8 write_value = xor_value (value, PSE_AVAIL_PWR_SS_BIT, PSE_AVAIL_PWR_SS_LEN, val);
+	
+//	dev_info(dev, "%s: %x %x %x %x\n", __func__, value, write_value, HPMD_REG(port), val);
+	return ltc4291_write_reg(ddata, HPMD_REG(port), (u8)write_value);
+}	
+
+static int ltc4291_set_pse_avail_pwr_ds(struct device *dev, int port, int val) {
+	
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	u8 value = ltc4291_read_reg(ddata, HPMD_REG(port));
+	u8 write_value = xor_value (value, PSE_AVAIL_PWR_DS_BIT, PSE_AVAIL_PWR_DS_LEN, val);
+
+//	dev_info(dev, "%s: %x %x %x %x\n", __func__, value, write_value, HPMD_REG(port), val);
+	return ltc4291_write_reg(ddata, HPMD_REG(port), (u8)write_value);
+}	
+
+static int ltc4291_set_dis(struct device *dev, int port, int val) {
+	
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	u8 value = ltc4291_read_reg(ddata, CUT_REG(port));
+	u8 write_value = xor_value (value, DIS_BIT, 1, val);
+	return ltc4291_write_reg(ddata, CUT_REG(port), (u8)write_value);
+}
+
+static int ltc4291_set_cutrng(struct device *dev, int port, int val) {
+	
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	u8 value = ltc4291_read_reg(ddata, CUT_REG(port));
+	u8 write_value = xor_value (value, CUTRNG_BIT, 1, val);
+	return ltc4291_write_reg(ddata, CUT_REG(port), (u8)write_value);
+}
+
+static int ltc4291_set_cut(struct device *dev, int port, int val) {
+	
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	u8 value = ltc4291_read_reg(ddata, CUT_REG(port));
+	u8 write_value = xor_value (value, CUT_BIT, CUT_LEN, val);
+	return ltc4291_write_reg(ddata, CUT_REG(port), (u8)write_value);
+}
+
+static int ltc4291_set_lim(struct device *dev, int port, int val) {
+	
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	return ltc4291_write_reg(ddata, LIM_REG(port), (u8)val);
+}
+
+static int ltc4291_get_pse_allocated_pwr(struct device *dev, int port, int channel) {
+	
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	u8 value = ltc4291_read_reg(ddata, HPSTAT_REG(port));
+	u8 offset;
+	
+	offset = (channel == 0)? PSE_ALLOCATED_PWR_A_BIT : PSE_ALLOCATED_PWR_B_BIT;
+	return mask_value(value, offset, PSE_ALLOCATED_PWR_LEN);
+}
+
+static int ltc4291_get_fetbad(struct device *dev, int port) {
+	
+	int res;
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	u8 value = ltc4291_read_reg(ddata, HPSTAT_REG(port));
+	return mask_value(value, FETBAD_BIT, 1);
+}
+
+static int ltc4291_get_pd_acs_req(struct device *dev, int port) {
+	int res;
+	struct ltc4291_data *ddata = dev_get_drvdata(dev);
+	u8 value = ltc4291_read_reg(ddata, HPSTAT_REG(port));
+	return mask_value(value, PD_ACS_REQ_BIT, 1);
+}
 
 static int ltc4291_apply_dt_defaults(struct device *dev) {
 	int i;
@@ -202,6 +298,10 @@ static int ltc4291_apply_dt_defaults(struct device *dev) {
 			if (ddata->pdata.pt_df[i].mode == PORT_MODE_MANUAL)
 				ltc4291_switch_port_power(dev, i,
 				    ddata->pdata.pt_df[i].pwr);
+			ltc4291_set_pse_avail_pwr_ss(dev, i,
+                                    ddata->pdata.pt_df[i].max_class_s_signature - 3);
+			ltc4291_set_pse_avail_pwr_ds(dev, i,
+                                    ddata->pdata.pt_df[i].max_class_d_signature - 3);
 		}
 	}
 	return 0;
@@ -375,6 +475,8 @@ static int ltc4291_of_probe(struct device *dev,
 				pdata->pt_df[i].mode = PORT_MODE_OFF;
 		}
 		of_property_read_u32(child, "power", &pdata->pt_df[i].pwr);
+		of_property_read_u32(child, "max-class-single-signature", &pdata->pt_df[i].max_class_s_signature);
+		of_property_read_u32(child, "max-class-dual-signature", &pdata->pt_df[i].max_class_d_signature);
 		i++;
 	}
 	return 0;

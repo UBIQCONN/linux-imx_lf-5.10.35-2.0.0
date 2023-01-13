@@ -48,16 +48,8 @@
 #define TCUT_EVENT	1 << 5
 #define TSTRAT_EVENT	1 << 6
 #define SUPPLY_EVENT	1 << 7
-/*
-#define PEC	1 << 0
-#define PGC	1 << 1
-#define DISF	1 << 2
-#define DETC	1 << 3
-#define CLASC	1 << 4
-#define IFAULT	1 << 5
-#define STRTF	1 << 6
-#define SUPF	1 << 7
-*/
+
+
 
 /* Input voltage */
 #define INPUT_V_SZ		2
@@ -97,6 +89,42 @@
 #define PORT_SELECT( port_i ) (0x1 << (port_i))
 #define ASCII_TO_DIGIT( ascii_digit ) (ascii_digit - 0x30) 
 
+#define HIGH_POWER_BASE_REG	0x45 /* high power base*/
+#define HPFEAT_REG(i)		(HIGH_POWER_BASE_REG + i*5) 
+#define HPMD_REG(i)		(HIGH_POWER_BASE_REG + i*5 + 1) 
+#define CUT_REG(i)		(HIGH_POWER_BASE_REG + i*5 + 2) 
+#define LIM_REG(i)		(HIGH_POWER_BASE_REG + i*5 + 3) 
+#define HPSTAT_REG(i)		(HIGH_POWER_BASE_REG + i*5 + 4) 
+
+#define STATUS_LOCK_BIT		0
+#define ACS_REQ_P_BIT		1
+#define ACS_REQ_L_BIT		2
+#define CLS_OVER_EN_BIT		3
+
+#define PSE_AVAIL_PWR_DS_BIT	6
+#define PSE_AVAIL_PWR_DS_LEN	2
+#define PSE_AVAIL_PWR_SS_BIT	3
+#define PSE_AVAIL_PWR_SS_LEN	3
+#define LEGEN_BIT		1
+
+#define DIS_BIT			7
+#define CUTRNG_BIT		6
+#define CUT_BIT			0
+#define CUT_LEN			6
+
+#define PD_ACS_REQ_BIT		0
+#define FETBAD_BIT		1
+#define PSE_ALLOCATED_PWR_A_BIT 2
+#define PSE_ALLOCATED_PWR_B_BIT 5
+#define PSE_ALLOCATED_PWR_LEN	3	
+
+#define POWER_CANNEL_REG	0x64 /* high power base*/
+#define LSTATP_REG(port, channel)	(POWER_CANNEL_REG + 2*port + channel) 
+
+#define CLASS_BIT 		4
+#define DETECT_BIT	 	0
+
+
 #define TEMP_LSB		652 /* 0.652 C */
 #define VOLT_LSB		10100 /* 10.1 mV */
 #define CURR_S250_LSB		410000   /* 410 uA */
@@ -112,6 +140,8 @@ struct pt_dflt {
 	int enable;
 	int mode;
 	int pwr;
+	int max_class_d_signature;
+	int max_class_s_signature;
 };
 
 struct ltc4291_platform_data {
