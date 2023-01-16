@@ -2,6 +2,7 @@
 #include <osl.h>
 #include <dhd_linux.h>
 #include <linux/gpio.h>
+#include <linux/of_gpio.h>
 
 #if defined(BUS_POWER_RESTORE) && defined(BCMSDIO)
 #include <linux/mmc/core.h>
@@ -44,7 +45,7 @@ dhd_wlan_set_power(int on
 	if (on) {
 		printf("======== PULL WL_REG_ON(%d) HIGH! ========\n", gpio_wl_reg_on);
 		if (gpio_wl_reg_on >= 0) {
-			err = gpio_direction_output(gpio_wl_reg_on, 0);
+			err = gpio_direction_output(gpio_wl_reg_on, 1);
 			if (err) {
 				printf("%s: WL_REG_ON didn't output high\n", __FUNCTION__);
 				return -EIO;
@@ -94,7 +95,7 @@ dhd_wlan_set_power(int on
 #endif /* BUS_POWER_RESTORE */
 		printf("======== PULL WL_REG_ON(%d) LOW! ========\n", gpio_wl_reg_on);
 		if (gpio_wl_reg_on >= 0) {
-			err = gpio_direction_output(gpio_wl_reg_on, 1);
+			err = gpio_direction_output(gpio_wl_reg_on, 0);
 			if (err) {
 				printf("%s: WL_REG_ON didn't output low\n", __FUNCTION__);
 				return -EIO;
