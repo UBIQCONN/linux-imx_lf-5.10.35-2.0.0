@@ -17,7 +17,7 @@ CONFIG_BCMDHD_DEBUG := y
 #CONFIG_BCMDHD_WAPI := y
 
 CONFIG_MACH_PLATFORM := y
-#CONFIG_BCMDHD_DTS := y
+CONFIG_BCMDHD_DTS := y
 
 DHDCFLAGS = -Wall -Wstrict-prototypes -Wno-date-time -Dlinux -DBCMDRIVER  \
 	-DBCMDONGLEHOST -DBCMDMA32 -DBCMFILEIMAGE                             \
