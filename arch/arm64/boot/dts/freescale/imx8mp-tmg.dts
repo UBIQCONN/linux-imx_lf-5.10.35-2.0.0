@@ -146,6 +146,7 @@
 	pinctrl-0 = <&pinctrl_ecspi1 &pinctrl_ecspi1_cs>;
 	cs-gpios = <&gpio5 9 GPIO_ACTIVE_LOW>; 
 	status = "okay";
+
 };
 
 &ecspi2 {
@@ -157,11 +158,6 @@
 	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
 	status = "okay";
 
-	spidev1: spi@0 {
-		reg = <0>;
-		compatible = "rohm,dh2228fv";
-		spi-max-frequency = <500000>;
-	};
 };
 
 &fec {
@@ -175,7 +171,7 @@
 	status = "okay";
 
 	fixed-link {
-		speed = <100>;
+		speed = <1000>;
 		/*full-duplex;*/
 	};
 
@@ -228,7 +224,7 @@
 					label = "cpu";
 					ethernet = <&fec>;
 					fixed-link {
-						speed = <100>;
+						speed = <1000>;
 						/*full-duplex;*/
 					};
 				};
