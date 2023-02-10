@@ -65,6 +65,10 @@
 #define RAGC_CTRL_A			29
 #define RAGC_CTRL_B			30
 #define RAGC_CTRL_C			31
+#define LAGC_GAIN			32
+#define RAGC_GAIN			33
+#define LAGC_NOISE_DEBOUNCE		34
+#define RAGC_NOISE_DEBOUNCE		35
 
 /* DAC Power and Left High Power Output control registers */
 #define DAC_PWR				37

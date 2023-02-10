@@ -274,7 +274,7 @@ static SOC_ENUM_DOUBLE_DECL(aic3x_adc_hpf_enum, AIC3X_CODEC_DFILT_CTRL, 6, 4,
 
 static const char * const aic3x_linein_level[] = {
 	"0dB", "-1.5dB", "-3dB", "-4.5dB",
-	"-6dB", "-7.5dB", "-9dB", "-10.5dB" };
+	"-6dB", "-7.5dB", "-9dB", "-10.5dB", "-12dB" };
 static SOC_ENUM_SINGLE_DECL(aic3x_rlinein_level_r_enum, LINE1R_2_RADC_CTRL, 3,
 			    aic3x_linein_level);
 static SOC_ENUM_SINGLE_DECL(aic3x_llinein_level_l_enum, LINE1L_2_LADC_CTRL, 3,
@@ -316,6 +316,14 @@ static SOC_ENUM_SINGLE_DECL(aic3x_poweron_time_enum, HPOUT_POP_REDUCTION, 4,
 static const char * const aic3x_rampup_step[] = { "0ms", "1ms", "2ms", "4ms" };
 static SOC_ENUM_SINGLE_DECL(aic3x_rampup_step_enum, HPOUT_POP_REDUCTION, 2,
 			    aic3x_rampup_step);
+
+
+static const char * const aic3x_agc_hysteresis_level[] = {
+	"1dB", "2dB", "3dB", "disabled" };
+static SOC_ENUM_SINGLE_DECL(aic3x_left_hysteresis_level_enum, LAGC_CTRL_C, 6,
+			    aic3x_agc_hysteresis_level);
+static SOC_ENUM_SINGLE_DECL(aic3x_right_hysteresis_level_enum, RAGC_CTRL_C, 6,
+			    aic3x_agc_hysteresis_level);
 
 /*
  * DAC digital volumes. From -63.5 to 0 dB in 0.5 dB steps
@@ -443,6 +451,20 @@ static const struct snd_kcontrol_new aic3x_snd_controls[] = {
 	SOC_ENUM("Right Line to Left ADC level", aic3x_rlinein_level_l_enum),
 	SOC_ENUM("Left Line to Right ADC level", aic3x_llinein_level_r_enum),
 	SOC_ENUM("Left Line to Left ADC level", aic3x_llinein_level_l_enum),
+	
+	SOC_DOUBLE_R("AGC Noise Threshold", LAGC_CTRL_C, RAGC_CTRL_C,
+			1, 0x1F, 0),
+	SOC_DOUBLE_R("AGC Maximum Level", LAGC_CTRL_B, RAGC_CTRL_B,
+			1, 0x7F, 0),
+	SOC_DOUBLE_R("AGC Clip Stepping Control", LAGC_CTRL_C, RAGC_CTRL_C, 0, 0x01, 0),
+	
+	SOC_ENUM("Left Noise Gate Hysteresis Level Control", aic3x_left_hysteresis_level_enum),
+	SOC_ENUM("Right Noise Gate Hysteresis Level Control", aic3x_right_hysteresis_level_enum),
+	
+	SOC_DOUBLE_R("AGC Noise Detection Debounce Control", LAGC_NOISE_DEBOUNCE, RAGC_NOISE_DEBOUNCE,
+			3, 0x1F, 0),
+	SOC_DOUBLE_R("AGC Signal Detection Debounce Control", LAGC_NOISE_DEBOUNCE, RAGC_NOISE_DEBOUNCE,
+			0, 0x07, 0),
 };
 
 /* For other than tlv320aic3104 */
