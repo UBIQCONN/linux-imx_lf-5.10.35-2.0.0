@@ -125,43 +125,6 @@
                 regulator-always-on;
                 regulator-boot-on;
         };
-
-	EM9_Full_pwr_on: em9-full-pwr-on {
-                compatible = "regulator-fixed";
-                regulator-name = "em9_full_pwr_up";
-                enable-active-high;
-                gpio = <&pca9535_2 8 GPIO_ACTIVE_HIGH>;
-                regulator-always-on;
-                regulator-boot-on;
-        };
-
-	EM7_Full_pwr_on: em7-full-pwr-on {
-                compatible = "regulator-fixed";
-                regulator-name = "em7_full_pwr_up";
-                enable-active-high;
-                gpio = <&pca9535_2 9 GPIO_ACTIVE_HIGH>;
-                regulator-always-on;
-                regulator-boot-on;
-        };
-
-	EM9_RESET: em9-reset {
-                compatible = "regulator-fixed";
-                regulator-name = "em10_reset";
-      		startup-delay-us = <1000000>;
-                enable-active-low;
-                gpio = <&pca9535_2 10 GPIO_ACTIVE_HIGH>;
-                regulator-always-on; 
-        /*        regulator-boot-on; */ 
-        };
-
-	EM7_RESET: em7-reset {
-                compatible = "regulator-fixed";
-                regulator-name = "em11_reset";
-      		startup-delay-us = <1000000>;
-                enable-active-low;
-                gpio = <&pca9535_2 11 GPIO_ACTIVE_HIGH>;
-                regulator-always-on;
-        };
 };
 
 &A53_0 {
@@ -446,48 +409,6 @@
 			attach-bridge;
                };
        };
-};
-
-&pcie0{
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pcie0>;
-	epdev_on-supply = <&EM9_RESET>;
-	disable-gpio = <&pca9535_2 14 GPIO_ACTIVE_LOW>;   
-	reset-gpio = <&gpio4 21 GPIO_ACTIVE_LOW>;
-	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>,
-		 <&clk IMX8MM_CLK_PCIE1_AUX>,
-		 <&clk IMX8MM_CLK_PCIE1_PHY>,
-		 <&pcie0_refclk>;
-	clock-names = "pcie", "pcie_aux", "pcie_phy", "pcie_bus";
-	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-			  <&clk IMX8MM_CLK_PCIE1_PHY>,
-			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
-	assigned-clock-rates = <10000000>, <100000000>, <250000000>;
-	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
-				 <&clk IMX8MM_SYS_PLL2_100M>,
-				 <&clk IMX8MM_SYS_PLL2_250M>;
-	ext_osc = <1>;
-	status = "okay";
-};
-
-&pcie0_ep{
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pcie0>;
-	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>,
-		 <&clk IMX8MM_CLK_PCIE1_AUX>,
-		 <&clk IMX8MM_CLK_PCIE1_PHY>,
-		 <&pcie0_refclk>;
-	clock-names = "pcie", "pcie_aux", "pcie_phy", "pcie_bus";
-	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-			  <&clk IMX8MM_CLK_PCIE1_PHY>,
-			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
-	assigned-clock-rates = <10000000>, <100000000>, <250000000>;
-	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
-				 <&clk IMX8MM_SYS_PLL2_100M>,
-				 <&clk IMX8MM_SYS_PLL2_250M>;
-	ext_osc = <1>;
-	l1ss-disabled;
-	status = "disabled";
 };
 
 &sai2 {
