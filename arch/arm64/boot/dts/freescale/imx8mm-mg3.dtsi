@@ -114,17 +114,6 @@
 		gpio = <&gpio1 6 GPIO_ACTIVE_HIGH>;
 		enable-active-low;
 	};
-
-	wifi_bt_power: wifi-bt-regulator {
-                compatible = "regulator-fixed";
-                enable-active-high;
-                gpio = <&gpio2 11 GPIO_ACTIVE_HIGH>;
-                pinctrl-names = "default";
-                pinctrl-0 = <&wifi_bt_drv>;
-                regulator-name = "wifi_bt_power";
-                regulator-always-on;
-                regulator-boot-on;
-        };
 };
 
 &A53_0 {
@@ -950,12 +939,6 @@
 	pinctrl_wdog: wdoggrp {
 		fsl,pins = <
 			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B	0xc6
-		>;
-	};
-
-	wifi_bt_drv: wifi-bt-drv{
-		fsl,pins = <
-			MX8MM_IOMUXC_SD1_STROBE_GPIO2_IO11	0x19
 		>;
 	};
 

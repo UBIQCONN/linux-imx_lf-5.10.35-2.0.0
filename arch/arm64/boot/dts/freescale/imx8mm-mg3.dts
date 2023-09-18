@@ -12,14 +12,6 @@
 	model = "FSL i.MX8MM MG3 board";
 	compatible = "fsl,imx8mm-mg3", "fsl,imx8mm";
 
-	bcmdhd {
-        	compatible = "android,bcmdhd_wlan";
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_usdhc1_gpio>;
-	        gpio_wl_reg_on = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-	        gpio_wl_host_wake = <&gpio2 9 GPIO_ACTIVE_HIGH>;
-	};
-
 	sound_tlv320aic3104: sound-tlv320aic3104 {
 		compatible = "simple-audio-card";
 		simple-audio-card,name = "tlv320aic3104-audio";
@@ -66,19 +58,6 @@
 			opp-hz = /bits/ 64 <750000000>;
 		};
 	};
-};
-
-&usdhc1 {
-	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wlan>;
-	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wlan>;
-	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wlan>;
-	bus-width = <4>;
-	cap-power-off-card;
-	pm-ignore-notify;
-	keep-power-in-suspend;
-	non-removable;
-	status = "okay";
 };
 
 &usdhc3 {
