@@ -56,5 +56,4 @@ config BCMDHD_SDIO_IRQ
 	bool "In-Band Interrupt"
 	help
 	  Interrupt from SDIO DAT[1]
-
 endchoice
